@@ -5,12 +5,12 @@
  */
 package breakout;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 
 /**
@@ -19,25 +19,35 @@ import javafx.stage.Stage;
  */
 public class BreakOut extends Application {
     
+    private final int WIDTH = 400;
+    private final int HEIGHT = 400;
+    private GameBoard gameBoard;
+    
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+        primaryStage.setTitle("Try LoopGame");
+        
+        Group root = new Group();
+        Scene theScene = new Scene(root);
+        primaryStage.setScene(theScene);
+
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        root.getChildren().add(canvas);
+        
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        gameBoard = new GameBoard(WIDTH, HEIGHT, gc);
+        gameBoard.reset();
+        
+        new AnimationTimer()
+        {
+            public void handle(long currentNanoTime)
+            {
+                gameBoard.refresh();
             }
-        });
+        }.start();
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
         
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
