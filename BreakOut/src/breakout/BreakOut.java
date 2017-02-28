@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -19,16 +20,16 @@ import javafx.stage.Stage;
  */
 public class BreakOut extends Application {
     
-    private final int WIDTH = 400;
-    private final int HEIGHT = 400;
+    private final int WIDTH = 600;
+    private final int HEIGHT = 500;
     private GameBoard gameBoard;
     
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Try LoopGame");
+        primaryStage.setTitle("BreakOut Game");
         
         Group root = new Group();
-        Scene theScene = new Scene(root);
+        Scene theScene = new Scene(root, WIDTH, HEIGHT, Color.web("rgb(30,42,60)"));
         primaryStage.setScene(theScene);
 
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
