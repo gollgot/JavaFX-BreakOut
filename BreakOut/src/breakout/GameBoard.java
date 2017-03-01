@@ -18,11 +18,16 @@ public class GameBoard {
     
     private final int WIDTH, HEIGHT;
     private GraphicsContext gc;
+    
     private final int BRICK_COLUMNS = 13;
     private final int BRICK_ROWS = 10;
     private final int BRICK_WIDTH = 38;
     private final int BRICK_HEIGHT = 16;
     private ArrayList<Brick> bricks = new ArrayList();
+    
+    private float playerX;
+    private final int PLAYER_WIDTH = 100;
+    private final int PLAYER_HEIGHT = 15;
 
     GameBoard(int WIDTH, int HEIGHT, GraphicsContext gc) {
         this.WIDTH = WIDTH;
@@ -31,22 +36,21 @@ public class GameBoard {
     }
     
     public void reset(){
+        playerX = WIDTH / 2;
         brickWallCreation();
     }
     
     public void refresh(){
+        // Display the brick wall
         for (int i = 0; i < bricks.size(); i++) {
             Brick currentBrick = bricks.get(i);
             if(!currentBrick.isDestroyed()){
                 currentBrick.collide();
                 if(currentBrick.getDamages() == 3){
-                    //gc.setFill(Color.web("rgb(90,90,140)"));
                     gc.setFill(Color.web("#216869"));
                 }else if(currentBrick.getDamages() == 2){
-                    //gc.setFill(Color.web("rgb(120,120,175)"));
                     gc.setFill(Color.web("#49A078"));
                 }else{
-                    //gc.setFill(Color.web("rgb(150,150,200)"));
                     gc.setFill(Color.web("#9CC5A1"));
                 }
                 // Draw Rectangle (the brick)
@@ -54,6 +58,10 @@ public class GameBoard {
                 gc.fillRect(currentBrick.getX(), currentBrick.getY(), BRICK_WIDTH-2, BRICK_HEIGHT-2);
             }
         }
+        
+        // Display the player
+        gc.setFill(Color.web("#D2D2E6"));
+        gc.fillRect(playerX-PLAYER_WIDTH/2, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
     
     private void brickWallCreation(){
