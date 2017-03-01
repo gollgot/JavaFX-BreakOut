@@ -43,7 +43,7 @@ public class GameBoard{
     }
     
     public void reset(){
-        playerX = WIDTH / 2;
+        playerX = WIDTH / 2 - PLAYER_WIDTH / 2;
         vPlayer = 0;
         brickWallCreation();
     }
@@ -119,10 +119,16 @@ public class GameBoard{
         }
         
         playerX += vPlayer;
+        // Collision with windows (left and right side)
+        if(playerX < 0){
+            playerX = 0;
+        }else if(playerX > WIDTH - PLAYER_WIDTH){
+            playerX = WIDTH - PLAYER_WIDTH;
+        }
         
         // Display player
         gc.setFill(Color.web("#D2D2E6"));
-        gc.fillRect(playerX-PLAYER_WIDTH/2, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT); 
+        gc.fillRect(playerX, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT); 
     }
     
     private void keyLiestener(){
