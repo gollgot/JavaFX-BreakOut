@@ -28,6 +28,7 @@ public class GameBoard{
     private ArrayList<Brick> bricks = new ArrayList();
     
     private float playerX;
+    private float vPlayer = 0;
     private final int PLAYER_WIDTH = 100;
     private final int PLAYER_HEIGHT = 15;
     private boolean left = false;
@@ -43,6 +44,7 @@ public class GameBoard{
     
     public void reset(){
         playerX = WIDTH / 2;
+        vPlayer = 0;
         brickWallCreation();
     }
 
@@ -53,7 +55,7 @@ public class GameBoard{
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         
         displayBrickWall();
-        displayPlayer();
+        moveAndDisplayPlayer();
     }
     
     private void brickWallCreation(){
@@ -95,14 +97,28 @@ public class GameBoard{
         }
     }
     
-    private void displayPlayer(){
+    private void moveAndDisplayPlayer(){
         // Move the player
         if(left){
-            playerX -= 2;
+            vPlayer -= .6;
         }
         if(right){
-            playerX += 2;
+            vPlayer += .6;
         }
+        // If we don't move the player : We multiply the velocity by 0.9
+        // This way, the velocity is reduced step by step until 0.00000xxxx so it will be stop smoothly 
+        if(!left && !right){
+            vPlayer *= .8;
+        }
+        
+        // We bridle the velocity to 7 or -7 (max velocity)
+        if(vPlayer < -7){
+            vPlayer = -7;
+        }else if(vPlayer > 7){
+            vPlayer = 7;
+        }
+        
+        playerX += vPlayer;
         
         // Display player
         gc.setFill(Color.web("#D2D2E6"));

@@ -30,6 +30,7 @@ public class BreakOut extends Application {
         primaryStage.setTitle("BreakOut Game");
         primaryStage.initStyle(StageStyle.UNIFIED); // Remove the blue border on the windows
         primaryStage.setResizable(false);
+        primaryStage.sizeToScene(); // fit the stage to the scene (no weird padding right o_O)
         
         Group root = new Group();
         Scene theScene = new Scene(root, WIDTH, HEIGHT, Color.web("#242A40"));
