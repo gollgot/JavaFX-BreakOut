@@ -29,7 +29,7 @@ public class BreakOut extends Application {
         primaryStage.setTitle("BreakOut Game");
         
         Group root = new Group();
-        Scene theScene = new Scene(root, WIDTH, HEIGHT, Color.web("#7A918D"));
+        Scene theScene = new Scene(root, WIDTH, HEIGHT, Color.web("#242A40"));
         primaryStage.setScene(theScene);
 
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
