@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="BreakOut.jar" size="9454" download="eager" />
+    <jar href="BreakOut.jar" size="9583" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="BreakOut" >
     <param name="requiredFXVersion" value="8.0+"/>
