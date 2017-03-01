@@ -122,8 +122,10 @@ public class GameBoard{
         // Collision with windows (left and right side)
         if(playerX < 0){
             playerX = 0;
+            vPlayer = 0;
         }else if(playerX > WIDTH - PLAYER_WIDTH){
             playerX = WIDTH - PLAYER_WIDTH;
+            vPlayer = 0;
         }
         
         // Display player
