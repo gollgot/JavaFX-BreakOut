@@ -7,15 +7,13 @@ package breakout;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -30,6 +28,8 @@ public class BreakOut extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("BreakOut Game");
+        primaryStage.initStyle(StageStyle.UNIFIED); // Remove the blue border on the windows
+        primaryStage.setResizable(false);
         
         Group root = new Group();
         Scene theScene = new Scene(root, WIDTH, HEIGHT, Color.web("#242A40"));
