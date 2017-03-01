@@ -33,6 +33,11 @@ public class GameBoard{
     private final int PLAYER_HEIGHT = 15;
     private boolean left = false;
     private boolean right = false;
+    
+    private float ballX;
+    private float ballY;
+    private float vBall[] = {3,1};
+    private final int BALL_RADIUS = 6;
 
     GameBoard(Scene scene, int WIDTH, int HEIGHT, GraphicsContext gc) {
         this.scene = scene;
@@ -45,6 +50,10 @@ public class GameBoard{
     public void reset(){
         playerX = WIDTH / 2 - PLAYER_WIDTH / 2;
         vPlayer = 0;
+        
+        ballX = WIDTH / 2 - BALL_RADIUS;
+        ballY = HEIGHT - 100;
+        
         brickWallCreation();
     }
 
@@ -56,6 +65,7 @@ public class GameBoard{
         
         displayBrickWall();
         moveAndDisplayPlayer();
+        moveAndDisplayBall();
     }
     
     private void brickWallCreation(){
@@ -128,9 +138,23 @@ public class GameBoard{
             vPlayer = 0;
         }
         
-        // Display player
+        // Display the player
         gc.setFill(Color.web("#D2D2E6"));
         gc.fillRect(playerX, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT); 
+    }
+    
+    private void moveAndDisplayBall(){
+        ballX -= vBall[0];
+        ballY -= vBall[1];
+        
+        // Collision with left side
+        if(ballX < 0){
+            vBall[0] *= -1; // inverse the vBall X
+        }
+        
+        // Display the ball
+        gc.setFill(Color.web("#FFFFFF"));
+        gc.fillOval(ballX, ballY, BALL_RADIUS * 2, BALL_RADIUS * 2);
     }
     
     private void keyLiestener(){
