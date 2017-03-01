@@ -40,11 +40,14 @@ public class GameBoard {
             if(!currentBrick.isDestroyed()){
                 currentBrick.collide();
                 if(currentBrick.getDamages() == 3){
-                    gc.setFill(Color.web("rgb(90,90,140)"));
+                    //gc.setFill(Color.web("rgb(90,90,140)"));
+                    gc.setFill(Color.web("#216869"));
                 }else if(currentBrick.getDamages() == 2){
-                    gc.setFill(Color.web("rgb(120,120,175)"));
+                    //gc.setFill(Color.web("rgb(120,120,175)"));
+                    gc.setFill(Color.web("#49A078"));
                 }else{
-                    gc.setFill(Color.web("rgb(150,150,200)"));
+                    //gc.setFill(Color.web("rgb(150,150,200)"));
+                    gc.setFill(Color.web("#9CC5A1"));
                 }
                 // Draw Rectangle (the brick)
                 // BRICK_WIDTH-2 and BRICK_HEIGHT-2 => to let little space (2px) between each brick
