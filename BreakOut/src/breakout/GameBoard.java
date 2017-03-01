@@ -5,17 +5,22 @@
  */
 package breakout;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 /**
  *
  * @author Loic
  */
-public class GameBoard {
+public class GameBoard{
     
+    private Scene scene;
     private final int WIDTH, HEIGHT;
     private GraphicsContext gc;
     
@@ -28,40 +33,30 @@ public class GameBoard {
     private float playerX;
     private final int PLAYER_WIDTH = 100;
     private final int PLAYER_HEIGHT = 15;
+    private boolean left = false;
+    private boolean right = false;
 
-    GameBoard(int WIDTH, int HEIGHT, GraphicsContext gc) {
+    GameBoard(Scene scene, int WIDTH, int HEIGHT, GraphicsContext gc) {
+        this.scene = scene;
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.gc = gc;
+        keyLiestener();
     }
     
     public void reset(){
         playerX = WIDTH / 2;
         brickWallCreation();
     }
+
     
-    public void refresh(){
-        // Display the brick wall
-        for (int i = 0; i < bricks.size(); i++) {
-            Brick currentBrick = bricks.get(i);
-            if(!currentBrick.isDestroyed()){
-                currentBrick.collide();
-                if(currentBrick.getDamages() == 3){
-                    gc.setFill(Color.web("#216869"));
-                }else if(currentBrick.getDamages() == 2){
-                    gc.setFill(Color.web("#49A078"));
-                }else{
-                    gc.setFill(Color.web("#9CC5A1"));
-                }
-                // Draw Rectangle (the brick)
-                // BRICK_WIDTH-2 and BRICK_HEIGHT-2 => to let little space (2px) between each brick
-                gc.fillRect(currentBrick.getX(), currentBrick.getY(), BRICK_WIDTH-2, BRICK_HEIGHT-2);
-            }
-        }
+    
+    public void refresh(){     
+        // Clear all the canvas (for refresh draws etc...)
+        gc.clearRect(0, 0, WIDTH, HEIGHT);
         
-        // Display the player
-        gc.setFill(Color.web("#D2D2E6"));
-        gc.fillRect(playerX-PLAYER_WIDTH/2, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT);
+        displayBrickWall();
+        displayPlayer();
     }
     
     private void brickWallCreation(){
@@ -84,4 +79,68 @@ public class GameBoard {
         }
     }
     
+    private void displayBrickWall(){
+        for (int i = 0; i < bricks.size(); i++) {
+            Brick currentBrick = bricks.get(i);
+            if(!currentBrick.isDestroyed()){
+                currentBrick.collide();
+                if(currentBrick.getDamages() == 3){
+                    gc.setFill(Color.web("#216869"));
+                }else if(currentBrick.getDamages() == 2){
+                    gc.setFill(Color.web("#49A078"));
+                }else{
+                    gc.setFill(Color.web("#9CC5A1"));
+                }
+                // Draw Rectangle (the brick)
+                // BRICK_WIDTH-2 and BRICK_HEIGHT-2 => to let little space (2px) between each brick
+                gc.fillRect(currentBrick.getX(), currentBrick.getY(), BRICK_WIDTH-2, BRICK_HEIGHT-2);
+            }
+        }
+    }
+    
+    private void displayPlayer(){
+        // Move the player
+        if(left){
+            playerX -= 2;
+        }
+        if(right){
+            playerX += 2;
+        }
+        
+        // Display player
+        gc.setFill(Color.web("#D2D2E6"));
+        gc.fillRect(playerX-PLAYER_WIDTH/2, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT); 
+    }
+    
+    private void keyLiestener(){
+        scene.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
+            public void handle(javafx.scene.input.KeyEvent event) {
+                switch(event.getCode()){
+                    case LEFT:
+                        left = true;
+                        break;
+                    case RIGHT:
+                        right = true;
+                        break;
+                }
+            }
+        });
+        
+        scene.setOnKeyReleased(new EventHandler<javafx.scene.input.KeyEvent>() {
+            @Override
+            public void handle(javafx.scene.input.KeyEvent event) {
+                switch(event.getCode()){
+                    case LEFT:
+                        left = false;
+                        break;
+                    case RIGHT:
+                        right = false;
+                        break;
+                }
+            }
+        });
+    }
+    
+    
+
 }

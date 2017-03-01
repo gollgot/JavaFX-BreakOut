@@ -7,10 +7,13 @@ package breakout;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -37,7 +40,7 @@ public class BreakOut extends Application {
         
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        gameBoard = new GameBoard(WIDTH, HEIGHT, gc);
+        gameBoard = new GameBoard(theScene, WIDTH, HEIGHT, gc);
         gameBoard.reset();
         
         new AnimationTimer()
