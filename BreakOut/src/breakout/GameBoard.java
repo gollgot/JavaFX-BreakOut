@@ -37,7 +37,7 @@ public class GameBoard{
     
     private float ballX;
     private float ballY;
-    private final int BALL_SPEED = 3;
+    private final double BALL_SPEED = 2.5;
     private double vBall[] = {0,0};
     private final int BALL_RADIUS = 6;
 
@@ -57,7 +57,7 @@ public class GameBoard{
         
         ballX = WIDTH / 2 - BALL_RADIUS;
         ballY = HEIGHT - 100;
-        createBeginingBallAngle(45, 130);
+        createBeginingBallAngle(170, 170);
     }
 
     public void refresh(){     
@@ -91,10 +91,12 @@ public class GameBoard{
     
     /*
     * vBall[0] and vBall[1] is a velocity "vector" and BALL_SPEED is the norm of the "vector"
-    * We would like an angle between the ball and X axis, so
+    * We have an angle (between X axis and the ball)
+    * To have the x, y composants of the velocity vector, we have to do the cosinus or sinus of the angle multiply by the norm (speed)
+    * So, like that, we find the composants of te ball velocity, for the choosed angle.
     */
     private void createBeginingBallAngle(int minAngle, int maxAngle){
-        double angleDegrees = ThreadLocalRandom.current().nextInt(45, 130 + 1);
+        double angleDegrees = ThreadLocalRandom.current().nextInt(minAngle, maxAngle + 1);
         double angleRadians = Math.toRadians(angleDegrees);
         vBall[0] = Math.cos(angleRadians) * BALL_SPEED;
         vBall[1] = Math.sin(angleRadians) * BALL_SPEED;
@@ -159,6 +161,8 @@ public class GameBoard{
     }
     
     private void moveAndDisplayBall(){
+        // I added the X composant of the velocity ball vector to the ballX for move the ball on the X axis.
+        // I substract the Y composant of the velocity ball vector to the ballY for move the ball (top direction) on the Y axis.
         ballX += vBall[0];
         ballY -= vBall[1];
         
