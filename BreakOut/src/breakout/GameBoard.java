@@ -29,7 +29,8 @@ public class GameBoard{
     private ArrayList<Brick> bricks = new ArrayList();
     
     private float playerX;
-    private float vPlayer = 0;
+    private float playerY;
+    private float vPlayer;
     private final int PLAYER_WIDTH = 100;
     private final int PLAYER_HEIGHT = 15;
     private boolean left = false;
@@ -37,7 +38,7 @@ public class GameBoard{
     
     private float ballX;
     private float ballY;
-    private final double BALL_SPEED = 2.5;
+    private final double BALL_SPEED = 3;
     private double vBall[] = {0,0};
     private final int BALL_RADIUS = 6;
 
@@ -53,11 +54,12 @@ public class GameBoard{
         brickWallCreation();
         
         playerX = WIDTH / 2 - PLAYER_WIDTH / 2;
+        playerY = HEIGHT - 30;
         vPlayer = 0;
         
         ballX = WIDTH / 2 - BALL_RADIUS;
         ballY = HEIGHT - 100;
-        createBeginingBallAngle(170, 170);
+        createBeginingBallAngle(45, 130);
     }
 
     public void refresh(){     
@@ -100,9 +102,6 @@ public class GameBoard{
         double angleRadians = Math.toRadians(angleDegrees);
         vBall[0] = Math.cos(angleRadians) * BALL_SPEED;
         vBall[1] = Math.sin(angleRadians) * BALL_SPEED;
-        
-        System.out.println("vBall X : " + vBall[0]);
-        System.out.println("vBall Y : " + vBall[1]);
     }
     
     private void displayBrickWall(){
@@ -157,7 +156,7 @@ public class GameBoard{
         
         // Display the player
         gc.setFill(Color.web("#D2D2E6"));
-        gc.fillRect(playerX, HEIGHT-30, PLAYER_WIDTH, PLAYER_HEIGHT); 
+        gc.fillRect(playerX, playerY, PLAYER_WIDTH, PLAYER_HEIGHT); 
     }
     
     private void moveAndDisplayBall(){
@@ -166,10 +165,26 @@ public class GameBoard{
         ballX += vBall[0];
         ballY -= vBall[1];
         
-        // Collision with left side
-        if(ballX < 0){
+        // Collision with left and right side
+        if(ballX < 0 || ballX + BALL_RADIUS*2 > WIDTH){
             vBall[0] *= -1; // inverse the vBall X
         }
+        
+        // Collision with the top
+        if(ballY < 0){
+            vBall[1] *= -1; // inverse the vBall Y
+        }
+        
+        // Collision with the player
+        if(ballY + BALL_RADIUS*2 > playerY && ballY- BALL_RADIUS*2 < playerY && ballX + BALL_RADIUS*2 > playerX && ballX < playerX+PLAYER_WIDTH){
+            vBall[1] *= -1; // inverse the vBall Y
+        }
+        
+        // Collision with the bottom
+        if(ballY + BALL_RADIUS*2 > HEIGHT){
+            System.out.println("Perdu");
+        }
+        
         
         // Display the ball
         gc.setFill(Color.web("#FFFFFF"));
