@@ -6,6 +6,7 @@
 package breakout;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
@@ -36,7 +37,8 @@ public class GameBoard{
     
     private float ballX;
     private float ballY;
-    private float vBall[] = {3,1};
+    private final int BALL_SPEED = 3;
+    private double vBall[] = {0,0};
     private final int BALL_RADIUS = 6;
 
     GameBoard(Scene scene, int WIDTH, int HEIGHT, GraphicsContext gc) {
@@ -48,17 +50,16 @@ public class GameBoard{
     }
     
     public void reset(){
+        brickWallCreation();
+        
         playerX = WIDTH / 2 - PLAYER_WIDTH / 2;
         vPlayer = 0;
         
         ballX = WIDTH / 2 - BALL_RADIUS;
         ballY = HEIGHT - 100;
-        
-        brickWallCreation();
+        createBeginingBallAngle(45, 130);
     }
 
-    
-    
     public void refresh(){     
         // Clear all the canvas (for refresh draws etc...)
         gc.clearRect(0, 0, WIDTH, HEIGHT);
@@ -86,6 +87,20 @@ public class GameBoard{
                 bricks.add(brick);
             }
         }
+    }
+    
+    /*
+    * vBall[0] and vBall[1] is a velocity "vector" and BALL_SPEED is the norm of the "vector"
+    * We would like an angle between the ball and X axis, so
+    */
+    private void createBeginingBallAngle(int minAngle, int maxAngle){
+        double angleDegrees = ThreadLocalRandom.current().nextInt(45, 130 + 1);
+        double angleRadians = Math.toRadians(angleDegrees);
+        vBall[0] = Math.cos(angleRadians) * BALL_SPEED;
+        vBall[1] = Math.sin(angleRadians) * BALL_SPEED;
+        
+        System.out.println("vBall X : " + vBall[0]);
+        System.out.println("vBall Y : " + vBall[1]);
     }
     
     private void displayBrickWall(){
@@ -144,7 +159,7 @@ public class GameBoard{
     }
     
     private void moveAndDisplayBall(){
-        ballX -= vBall[0];
+        ballX += vBall[0];
         ballY -= vBall[1];
         
         // Collision with left side
