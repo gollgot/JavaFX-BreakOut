@@ -41,6 +41,7 @@ public class GameBoard{
     private final double BALL_SPEED = 3;
     private double vBall[] = {0,0};
     private final int BALL_RADIUS = 6;
+    private boolean ballLoose = false;
 
     GameBoard(Scene scene, int WIDTH, int HEIGHT, GraphicsContext gc) {
         this.scene = scene;
@@ -59,6 +60,7 @@ public class GameBoard{
         
         ballX = WIDTH / 2 - BALL_RADIUS;
         ballY = HEIGHT - 100;
+        ballLoose = false;
         createBeginingBallAngle(45, 130);
     }
 
@@ -67,8 +69,8 @@ public class GameBoard{
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         
         displayBrickWall();
-        moveAndDisplayPlayer();
         moveAndDisplayBall();
+        moveAndDisplayPlayer();
     }
     
     private void brickWallCreation(){
@@ -175,8 +177,13 @@ public class GameBoard{
             vBall[1] *= -1; // inverse the vBall Y
         }
         
+        
+        // to prevent bug if the ball comes on the player (after the Y limit) from the side ==> it's LOOSE
+        if(ballY + BALL_RADIUS*2 > playerY && ballX + BALL_RADIUS*2 < playerX || ballY + BALL_RADIUS*2 > playerY &&   ballX > playerX + PLAYER_WIDTH){
+            ballLoose = true;
+        }
         // Collision with the player
-        if(ballY + BALL_RADIUS*2 > playerY && ballY- BALL_RADIUS*2 < playerY && ballX + BALL_RADIUS*2 > playerX && ballX < playerX+PLAYER_WIDTH){
+        if(ballY + BALL_RADIUS*2 > playerY && ballX + BALL_RADIUS*2 >= playerX && ballX <= playerX + PLAYER_WIDTH && !ballLoose){
             vBall[1] *= -1; // inverse the vBall Y
         }
         
