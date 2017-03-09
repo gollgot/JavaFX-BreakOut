@@ -71,6 +71,7 @@ public class GameBoard{
         displayBrickWall();
         moveAndDisplayBall();
         moveAndDisplayPlayer();
+        checkBrickCollision();
     }
     
     private void brickWallCreation(){
@@ -110,14 +111,27 @@ public class GameBoard{
         for (int i = 0; i < bricks.size(); i++) {
             Brick currentBrick = bricks.get(i);
             if(!currentBrick.isDestroyed()){
-                currentBrick.collide();
-                if(currentBrick.getDamages() == 3){
+                currentBrick.collide(ballX, ballY);
+                switch(currentBrick.getDamages()){
+                    case 3:
+                        gc.setFill(Color.web("#216869"));
+                        break;
+                    case 2:
+                        gc.setFill(Color.web("#49A078"));
+                        break;
+                    case 1:
+                        gc.setFill(Color.web("#9CC5A1"));
+                        break;
+                    case 0:
+                        gc.setFill(Color.web("#FF0000"));
+                }
+                /*if(currentBrick.getDamages() == 3){
                     gc.setFill(Color.web("#216869"));
                 }else if(currentBrick.getDamages() == 2){
                     gc.setFill(Color.web("#49A078"));
-                }else{
+                }else if(){
                     gc.setFill(Color.web("#9CC5A1"));
-                }
+                }*/
                 // Draw Rectangle (the brick)
                 // BRICK_WIDTH-2 and BRICK_HEIGHT-2 => to let little space (2px) between each brick
                 gc.fillRect(currentBrick.getX(), currentBrick.getY(), BRICK_WIDTH-2, BRICK_HEIGHT-2);
@@ -193,14 +207,18 @@ public class GameBoard{
             // The raw angle define the angle returned with where the ball touch the player. And the raw angle is beetwen 160 and 20 but 160 is right side and 20 is left side.
             // So I have to inverse the angle direction => 180 - rawAngle so an angle of 140 is in real a 40° angle from right side
             double newAngle = 180 - rawAngle;
-            
             generateBallAngle(newAngle, newAngle);
-     
         }
         
         // Collision with the bottom
         if(ballY + BALL_RADIUS*2 > HEIGHT){
             System.out.println("Perdu");
+            // We loose a life (later) and generate new angle random beetwen 45° and 145°
+            // After, call the reset method with the life and if the life is not 0 do smothing etc...
+            ballX = WIDTH / 2 - BALL_RADIUS;
+            ballY = HEIGHT - 100;
+            ballLoose = false;
+            generateBallAngle(45, 135);
         }
         
         
@@ -236,6 +254,12 @@ public class GameBoard{
                 }
             }
         });
+    }
+
+    private void checkBrickCollision() {
+        for (int i = 0; i < bricks.size(); i++) {
+            bricks.get(i).collide(ballX, ballY);
+        }
     }
     
     

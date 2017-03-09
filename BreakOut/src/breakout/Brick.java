@@ -22,7 +22,7 @@ public class Brick {
         this.damages = damages;
     }
     
-    public void collide() {
+    public void collide(float ballX, float ballY) {
         
     }
     
