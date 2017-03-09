@@ -21,8 +21,8 @@ import javafx.stage.StageStyle;
  */
 public class BreakOut extends Application {
     
-    private final int WIDTH = 600;
-    private final int HEIGHT = 500;
+    private final int WIDTH = 550;
+    private final int HEIGHT = 400;
     private GameBoard gameBoard;
     
     @Override

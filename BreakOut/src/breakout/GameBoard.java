@@ -22,7 +22,7 @@ public class GameBoard{
     private final int WIDTH, HEIGHT;
     private GraphicsContext gc;
     
-    private final int BRICK_COLUMNS = 13;
+    private final int BRICK_COLUMNS = 11;
     private final int BRICK_ROWS = 10;
     private final int BRICK_WIDTH = 38;
     private final int BRICK_HEIGHT = 16;
@@ -38,7 +38,7 @@ public class GameBoard{
     
     private float ballX;
     private float ballY;
-    private final double BALL_SPEED = 6;
+    private final double BALL_SPEED = 5;
     private double vBall[] = {0,0};
     private final int BALL_RADIUS = 6;
     private boolean ballLoose = false;
@@ -61,7 +61,7 @@ public class GameBoard{
         ballX = WIDTH / 2 - BALL_RADIUS;
         ballY = HEIGHT - 100;
         ballLoose = false;
-        createBeginingBallAngle(45, 130);
+        generateBallAngle(45, 135);
     }
 
     public void refresh(){     
@@ -99,8 +99,8 @@ public class GameBoard{
     * To have the x, y composants of the velocity vector, we have to do the cosinus or sinus of the angle multiply by the norm (speed)
     * So, like that, we find the composants of te ball velocity, for the choosed angle.
     */
-    private void createBeginingBallAngle(int minAngle, int maxAngle){
-        double angleDegrees = ThreadLocalRandom.current().nextInt(minAngle, maxAngle + 1);
+    private void generateBallAngle(double minAngle, double maxAngle){
+        double angleDegrees = ThreadLocalRandom.current().nextDouble(minAngle, maxAngle + 1);
         double angleRadians = Math.toRadians(angleDegrees);
         vBall[0] = Math.cos(angleRadians) * BALL_SPEED;
         vBall[1] = Math.sin(angleRadians) * BALL_SPEED;
@@ -186,18 +186,15 @@ public class GameBoard{
         if(ballY + BALL_RADIUS*2 > playerY && ballX + BALL_RADIUS*2 >= playerX && ballX <= playerX + PLAYER_WIDTH && !ballLoose){
             vBall[1] *= -1; // inverse the vBall Y
             // I search the pourcent (on 160% => return angle between 160° and 20°) where touch the ball on the player Width
-            double rawAngle = 160 * ((ballX + BALL_RADIUS) - playerX) / PLAYER_WIDTH;
-            if(rawAngle < 20){
-                rawAngle = 20;
+            double rawAngle = 140 * ((ballX + BALL_RADIUS) - playerX) / PLAYER_WIDTH;
+            if(rawAngle < 40){
+                rawAngle = 40;
             }
             // The raw angle define the angle returned with where the ball touch the player. And the raw angle is beetwen 160 and 20 but 160 is right side and 20 is left side.
             // So I have to inverse the angle direction => 180 - rawAngle so an angle of 140 is in real a 40° angle from right side
             double newAngle = 180 - rawAngle;
             
-            // Generate the new angle (put on a method after)
-            double angleRadians = Math.toRadians(newAngle);
-            vBall[0] = Math.cos(angleRadians) * BALL_SPEED;
-            vBall[1] = Math.sin(angleRadians) * BALL_SPEED;
+            generateBallAngle(newAngle, newAngle);
      
         }
         
