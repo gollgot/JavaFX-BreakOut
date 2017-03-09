@@ -22,8 +22,15 @@ public class Brick {
         this.damages = damages;
     }
     
-    public void collide(float ballX, float ballY) {
-        
+    public boolean collide(float ballX, float ballY, int ballRadius, int brickWidth, int brickHeight) {
+        if(ballX+ballRadius >= x && ballX <= x+brickWidth && ballY <= y+brickHeight && ballY+ballRadius*2 > y){
+            damages--;
+            if(damages <= 0){
+                destroyed = true;
+            }
+            return true;
+        }
+        return false;
     }
     
     // GETTERS

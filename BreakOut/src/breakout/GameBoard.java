@@ -22,15 +22,15 @@ public class GameBoard{
     private final int WIDTH, HEIGHT;
     private GraphicsContext gc;
     
-    private final int BRICK_COLUMNS = 11;
-    private final int BRICK_ROWS = 10;
+    private final int BRICK_COLUMNS = 10;
+    private final int BRICK_ROWS = 13;
     private final int BRICK_WIDTH = 38;
     private final int BRICK_HEIGHT = 16;
     private ArrayList<Brick> bricks = new ArrayList();
     
     private float playerX;
     private float playerY;
-    private float vPlayer;
+    private float vPlayer = 9;
     private final int PLAYER_WIDTH = 100;
     private final int PLAYER_HEIGHT = 15;
     private boolean left = false;
@@ -56,7 +56,6 @@ public class GameBoard{
         
         playerX = WIDTH / 2 - PLAYER_WIDTH / 2;
         playerY = HEIGHT - 30;
-        vPlayer = 0;
         
         ballX = WIDTH / 2 - BALL_RADIUS;
         ballY = HEIGHT - 100;
@@ -71,14 +70,12 @@ public class GameBoard{
         displayBrickWall();
         moveAndDisplayBall();
         moveAndDisplayPlayer();
-        checkBrickCollision();
     }
     
     private void brickWallCreation(){
         for (int columnsCount = 0; columnsCount < BRICK_COLUMNS; columnsCount++) {
             for (int rowsCount = 0; rowsCount < BRICK_ROWS; rowsCount++) {
                 int damages;
-                
                 if(rowsCount <= 2){
                     damages = 3;
                 }else if(rowsCount <= 4){
@@ -89,6 +86,7 @@ public class GameBoard{
                 // Brick x : middle of the game windows - half brickwall width + current columns count * brick_width => this way the brickwall is center on the game windows 
                 // Brick y : 50 (random height from the top) + current rows count * brick_height
                 Brick brick = new Brick(WIDTH/2 - BRICK_COLUMNS*BRICK_WIDTH/2 + columnsCount*BRICK_WIDTH, 50+rowsCount*BRICK_HEIGHT, damages);
+                System.out.println(brick.getX()+" : "+brick.getY());
                 bricks.add(brick);
             }
         }
@@ -111,7 +109,9 @@ public class GameBoard{
         for (int i = 0; i < bricks.size(); i++) {
             Brick currentBrick = bricks.get(i);
             if(!currentBrick.isDestroyed()){
-                currentBrick.collide(ballX, ballY);
+                if(currentBrick.collide(ballX, ballY, BALL_RADIUS, BRICK_WIDTH, BRICK_HEIGHT)){
+                    vBall[1] *= -1;
+                }
                 switch(currentBrick.getDamages()){
                     case 3:
                         gc.setFill(Color.web("#216869"));
@@ -122,16 +122,7 @@ public class GameBoard{
                     case 1:
                         gc.setFill(Color.web("#9CC5A1"));
                         break;
-                    case 0:
-                        gc.setFill(Color.web("#FF0000"));
                 }
-                /*if(currentBrick.getDamages() == 3){
-                    gc.setFill(Color.web("#216869"));
-                }else if(currentBrick.getDamages() == 2){
-                    gc.setFill(Color.web("#49A078"));
-                }else if(){
-                    gc.setFill(Color.web("#9CC5A1"));
-                }*/
                 // Draw Rectangle (the brick)
                 // BRICK_WIDTH-2 and BRICK_HEIGHT-2 => to let little space (2px) between each brick
                 gc.fillRect(currentBrick.getX(), currentBrick.getY(), BRICK_WIDTH-2, BRICK_HEIGHT-2);
@@ -142,10 +133,10 @@ public class GameBoard{
     private void moveAndDisplayPlayer(){
         // Move the player
         if(left){
-            vPlayer -= .6;
+            vPlayer -= .9;
         }
         if(right){
-            vPlayer += .6;
+            vPlayer += .9;
         }
         // If we don't move the player : We multiply the velocity by 0.9
         // This way, the velocity is reduced step by step until 0.00000xxxx so it will be stop smoothly 
@@ -255,13 +246,4 @@ public class GameBoard{
             }
         });
     }
-
-    private void checkBrickCollision() {
-        for (int i = 0; i < bricks.size(); i++) {
-            bricks.get(i).collide(ballX, ballY);
-        }
-    }
-    
-    
-
 }
