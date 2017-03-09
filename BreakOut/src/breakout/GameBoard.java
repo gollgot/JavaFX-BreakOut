@@ -38,7 +38,7 @@ public class GameBoard{
     
     private float ballX;
     private float ballY;
-    private final double BALL_SPEED = 3;
+    private final double BALL_SPEED = 6;
     private double vBall[] = {0,0};
     private final int BALL_RADIUS = 6;
     private boolean ballLoose = false;
@@ -185,6 +185,20 @@ public class GameBoard{
         // Collision with the player
         if(ballY + BALL_RADIUS*2 > playerY && ballX + BALL_RADIUS*2 >= playerX && ballX <= playerX + PLAYER_WIDTH && !ballLoose){
             vBall[1] *= -1; // inverse the vBall Y
+            // I search the pourcent (on 160% => return angle between 160° and 20°) where touch the ball on the player Width
+            double rawAngle = 160 * ((ballX + BALL_RADIUS) - playerX) / PLAYER_WIDTH;
+            if(rawAngle < 20){
+                rawAngle = 20;
+            }
+            // The raw angle define the angle returned with where the ball touch the player. And the raw angle is beetwen 160 and 20 but 160 is right side and 20 is left side.
+            // So I have to inverse the angle direction => 180 - rawAngle so an angle of 140 is in real a 40° angle from right side
+            double newAngle = 180 - rawAngle;
+            
+            // Generate the new angle (put on a method after)
+            double angleRadians = Math.toRadians(newAngle);
+            vBall[0] = Math.cos(angleRadians) * BALL_SPEED;
+            vBall[1] = Math.sin(angleRadians) * BALL_SPEED;
+     
         }
         
         // Collision with the bottom
